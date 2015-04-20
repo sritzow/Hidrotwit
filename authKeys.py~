@@ -1,0 +1,9 @@
+keys = dict(
+consumer_key =          'JnDt896O3V2ICT0UHltJpgDJs',
+consumer_secret =       '8sJlHCc9AL75bqBPQThgXQThh3jg95d1quRUXVqjoSD9u82rJM', 
+
+
+access_token =          '3164390697-wJuly2iGNL40Mht40BU4biiMTd6lwkXR1Hqtmj2',
+access_token_secret =   'QSXgtvzGwWf6TvReF0SC42PUtwqqvd80kJjc3MKipnf63',
+)
+
