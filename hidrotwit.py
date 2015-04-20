@@ -7,8 +7,9 @@ def streamListener(self):
     pass
 def on_data(self, auto): 
     pass 
-def data(self, auto): 
-    data.json.loads(self, auto)
-    x = data[user][name]
-    
+
+def data(self, tweet): 
+    db.collection.insert(self,tweet)
+    x = data[self][twitter]	
+    WriteResult({ "nInserted" : 1 })
     
