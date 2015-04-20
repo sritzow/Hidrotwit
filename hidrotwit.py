@@ -1,4 +1,6 @@
 def streamListener(self):
     pass
-def on_data(self, auto): 
-    pass 
+def data(self, auto): 
+    data.json.loads(self, auto)
+    
+    
