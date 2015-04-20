@@ -3,8 +3,7 @@ from pymongo import MongoClient
 
 #implement SQL connection
 def startMongo():
-	$ mongod		#start an instance of MongoDB
-	client = MongoClient()
+	client = MongoClient().db
 	
 def streamListener(self):
     pass
