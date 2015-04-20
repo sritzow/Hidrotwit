@@ -1,11 +1,8 @@
 import pymongo
-from pymongo import MongoClient
 
 #implement SQL connection
 def startMongo():
-	$ mongod		#start an instance of MongoDB
-	client = MongoClient()
-	
+	print "this is where we do that"
 def streamListener(self):
     pass
 def on_data(self, auto): 
@@ -16,4 +13,4 @@ def data(self, tweet):
     x = data[self][twitter]
 	db.collection.save(self,tweet)
 	WriteResult({ "nInserted" : 1 })
-    
+	db.collection.update(self,tweet)
