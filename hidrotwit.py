@@ -1,8 +1,11 @@
 import pymongo
+from pymongo import MongoClient
 
 #implement SQL connection
 def startMongo():
-	print "this is where we do that"
+	$ mongod		#start an instance of MongoDB
+	client = MongoClient()
+	
 def streamListener(self):
     pass
 def on_data(self, auto): 
