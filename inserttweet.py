@@ -13,4 +13,4 @@ def data(self, tweet):
     x = data[self][twitter]
 	db.collection.save(self,tweet)
 	WriteResult({ "nInserted" : 1 })
-    
+	db.collection.update(self,tweet)
