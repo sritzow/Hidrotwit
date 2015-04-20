@@ -1,27 +1,26 @@
-from tweepy.streaming import StreamListener
-from tweepy import OAuthHandler
-from tweepy import stream
+import tweepy
+from authKeys import keys
 
-#http://apps.twitter.com -- create and app and get the generated keys
-consumer_key=""
-consumer_secret=""
-#Creat an access token on your pages app
-access_token=""
-access_token_secret=""
+CONSUMER_KEY = keys['consumer_key']
+CONSUMER_SECRET = keys['consumer_secret']
+ACCESS_TOKEN = keys['access_token']
+ACCESS_TOKEN_SECRET = keys['access_token_secret']
 
-class StdOutListener(StreamListener):
+
+class HidroTwitListener(tweepy.StreamListener):
     def on_data(self, data):
         print data
         return True
     def on_error(self, status):
         print status
-if __name__ == "__main__":
-    listenBot = StdOutListener()
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
 
-    stream = Stream(auth, listenBot)
-    stream.filter(track=['Whatever we should track')
+if __name__ == "__main__":
+    listenBot = HidroTwitListener()
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+
+    stream = tweepy.Stream(auth, listenBot)
+    stream.filter(track=['programming'])
 
 
 
