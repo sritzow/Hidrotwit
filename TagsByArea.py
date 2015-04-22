@@ -1,35 +1,56 @@
 import tweepy
-import json
+ 
+cons_key = 'xIvqTwnKncz4MvckyIzIzIsCh'
+cons_sec = 'XlJP5xE5OyVyRcJ5MDP20KratI7juDL0KrDYSAKSAzBb0GsrWc'
+acc_token = '3164465356-IpWdPyksEN5eTHKKDT8KtCHdjbgaz6sFCQ7Trm2'
+acc_secret = 'onubCuaZdM3jEhcFj7HIighRuYcV7gyvhoGjWw2XByFkN'
+ 
+auth = tweepy.auth.OAuthHandler(cons_key, cons_sec)
+auth.set_access_token(acc_token, acc_secret)
+api = tweepy.API(auth)
 
+# This list will remove common words from the search results
+exceptList = ['i', 'the', 'a', 'in', 'this', 'you', 'on', 'at', 'me', 'by', 'im', 'u', 'are']
+ 
+tweets = []
 
-consumer_key='xIvqTwnKncz4MvckyIzIzIsCh'
-consumer_secret='XlJP5xE5OyVyRcJ5MDP20KratI7juDL0KrDYSAKSAzBb0GsrWc'
+hashtags = {}
 
-access_token='3164465356-IpWdPyksEN5eTHKKDT8KtCHdjbgaz6sFCQ7Trm2'
-access_token_secret='onubCuaZdM3jEhcFj7HIighRuYcV7gyvhoGjWw2XByFkN'
+cursor = tweepy.Cursor(api.search,
+                       geocode='37.74533,-122.420082,50km',
+                       rpp=1000,
+                       result_type='recent',
+                       lang='en').items(500)
 
+for tweet in cursor:
+ 
+    words = tweet.text.split(' ')
+    finWords = []
+ 
+    nextWord = 0 # Used to grab the next word if the current word is a verb
+    lastWord = ""
+ 
+    for word in words:
+        word = word.strip('.')
+        word = word.strip(',')
+        word = word.strip('!')
+        word = word.strip('?')
+ 
+        #If the word is a hashtag, add it to the hashtag dictionary
+        if word != '' and word != None:
+            if word[0] == '#':
+                if word not in hashtags.keys():
+                    hashtags[word] = 1
+                else:
+                    hashtags[word] += 1
+            elif word not in exceptList:
+                word = word.lower() # Convert to lowercase
 
-class StdOutListener(tweepy.StreamListener):
-    def on_data(self, data):
-        tweets = json.loads(data)
-        try:
-            #print(tweets['user']['location'])
-            print(tweets['entities']['hashtags'])
-            
-        except UnicodeEncodeError:
-            print('UnicodeEncodeError')
-        print (' ')
-        return True
-
-    def on_error(self, status):
-        print(status)
-        return True
-
-if __name__ == '__main__':
-    l = StdOutListener()
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
-
-    # For more details refer to https://dev.twitter.com/docs/streaming-apis
-    stream = tweepy.Stream(auth, l)
-    stream.filter(locations=[-122.75,36.8,-121.75,37.8,-74,40,-73,41,-89,41,-88,42,-119,33,-117,34.5])
+print('\n')
+print("Most popular hashtags")
+for word in sorted(hashtags, key=hashtags.get, reverse=True):
+    try:
+        print("{}: {}".format(word, hashtags[word]))
+    except:
+        pass # Unicode conversion can cause printing problems
+print('\n')
