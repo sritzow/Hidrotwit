@@ -29,11 +29,7 @@ class HidroTwitListener(tweepy.StreamListener):
 		tweets = json.loads(data)
 		tweetstext = ''.join(tweets['text']).encode('utf-8')
 		try:
-			print(tweets['user']['location'])
-			print(tweets['lang'])
-			print(tweetstext)
-			print(tweets['entities']['hashtags'])
-			print(tweets['entities']['trends'])
+			print "Location:", tweets['user']['location'], "Tweet:", tweetstext
 			
 			self.insert(tweets)
 		except UnicodeEncodeError:
