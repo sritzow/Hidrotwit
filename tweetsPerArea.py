@@ -10,7 +10,8 @@ except pymongo.errors.ConnectionFailure, e:
 db = conn.tweets
 tweets=db.tweets
 
-def tweetsPerArea(tweets):
+
+def countTweetsPerArea(tweets):
 	areas={}
 	for tweet in tweets.find():					#pulls tweets and iterates through each tweet
 		try:
@@ -21,9 +22,15 @@ def tweetsPerArea(tweets):
 				areas[location]=1				#adds location key
 		except:
 			pass
-	return areas
+	db2=conn.tweetsPerArea
+	tweetsPerArea=db2.tweetsPerArea
+	tweetsPerArea.insert(areas)
+
+countTweetsPerArea(tweets)
 
 #below lines are to test if the function does what it is supposed to	
-#areas = tweetsPerArea(tweets)	
-#for location in areas:
-#	print areas[location],location
+
+# db2=conn.tweetsPerArea
+# tweetsPerArea=db2.tweetsPerArea
+# for i in tweetsPerArea.find_one():
+	# print i
