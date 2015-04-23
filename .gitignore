@@ -1,4 +1,8 @@
 hydro-test-file.py
+authKeys.py
+<<<<<<< HEAD
+*.pyc
+=======
 logs/*
 .DS_Store
 lib/*
@@ -11,3 +15,4 @@ share/
 *.pyc
 *.log
 *.swp
+>>>>>>> 473e5a2608e33c02f5949142102440cf7ddcd50d
