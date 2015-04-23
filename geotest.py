@@ -38,18 +38,6 @@ def getArea(tweet):
 			return "Los Angeles"
 	return None
 
-areas={}
-for tweet in tweets.find():
-	area = getArea(tweet)
-	if area != None:
-		if area in areas:
-			areas[area] += 1
-		else:
-			areas[area] = 1
-			
-for area in areas:
-	print areas[area], area
-	raw_input()
 	
 	
 	
