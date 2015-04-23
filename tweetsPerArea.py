@@ -14,14 +14,17 @@ def tweetsPerArea(tweets):
 	areas={}
 	for i in range(tweets.count()): 			#iterates through each tweet
 		tweet=tweets.find()[i]					#pulls tweet from mongo
-		location = tweet["place"]['name']		#gets location from tweet dict
-		if location in areas:
-			areas[location]+=1					#increases location count
-		else:
-			areas[location]=1					#adds location key
+		try:
+			location = tweet["place"]['name']		#gets location from tweet dict
+			if location in areas:
+				areas[location]+=1					#increases location count
+			else:
+				areas[location]=1					#adds location key
+		except:
+			pass
 	return areas
 
 #below lines are to test if the function does what it is supposed to	
-# areas = tweetsPerArea(tweets)	
-# for location in areas:
-	# print areas[location],location
+areas = tweetsPerArea(tweets)	
+for location in areas:
+	print areas[location],location
