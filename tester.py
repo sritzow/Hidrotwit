@@ -8,7 +8,6 @@ def millis():
 	
 conn = pymongo.MongoClient()
 db = conn.tweets
-
 items = db.tweets.find()
 
 def getArea(tweet):
@@ -43,8 +42,8 @@ def countByWord():
 			if place in area:
 				a = area[place]
 				for word in text.split(" "):
-					word = word.strip(',.@#').lower()
-					if len(word) >= 3 and not word.startswith('\\'):
+					word = word.replace('.', '').lower()
+					if len(word) >= 3 and not word.startswith('\\') and not word.startswith('$'):
 						if word in a:
 							a[word] += 1
 						else:
@@ -53,8 +52,8 @@ def countByWord():
 				area[place] = {}
 				a = area[place]
 				for word in text.split(" "):
-					word = word.strip(',.@#').lower()
-					if len(word) >= 3 and not word.startswith('\\'):
+					word = word.replace('.', '').lower()
+					if len(word) >= 3 and not word.startswith('\\') and not word.startswith('$'):
 						if word in a:
 							a[word] += 1
 						else:
@@ -99,6 +98,7 @@ def countByArea():
 	for item in items:
 		place = getArea(item)
 		if place != None:
+			print place
 			if place in area:
 				area[place] += 1
 			else:
@@ -107,13 +107,42 @@ def countByArea():
 	
 startTime = millis()
 print tweetCount()
-areas = countByHash()
 
-for area in areas:
-	try:
-		print area, areas[area]
-	except:
-		pass
+
+def saveHash():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	items = db.tweets.find()
+	areas = countByHash()
+	db.byhash.save(areas)		
+
+def saveName():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	items = db.tweets.find()
+	areas = countByName()
+	db.byname.save(areas)
+
+def saveArea():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	items = db.tweets.find()
+	areas = countByArea()
+	db.byarea.save(areas)
+	
+
+def saveWord():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	items = db.tweets.find()
+	areas = countByWord()
+	db.byword.save(areas)
+
+#saveHash()
+#saveName()
+#saveArea()
+saveWord()
+
 endTime = millis()
 
 print "Start: ", startTime, " End: ", endTime, " time: ", (endTime - startTime)
