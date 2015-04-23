@@ -96,23 +96,6 @@ def countByHash():
 def countByArea():
 	area = {}
 	for item in items:
-		delta = getArea(item)
-		print item[text]
-	#loop through all posts, get city from post- if city doesn't exist in dictionary, add it
-		#loop through words in post
-
-	if(word in area[city][words]):
-		area[city][words] += 1
-	else:
-		area[city][words]=1
-#each area key is a city, value being a new dictionary
-#the dictionary contains word as the key, and count as the value
-
-
-
-
-
-	for item in items:
 		place = getArea(item)
 		if place != None:
 			print place
