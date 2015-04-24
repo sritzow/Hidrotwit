@@ -32,6 +32,7 @@ def tweetCount():
 	
 def countByWord(items):
 	area = {}
+	filter = {"the", "and", "i'm", "that", "for", "you", "have", "with", "just", "this", "like", "your", "not", "but", "was", "are", "get", "out", "&amp;", "all", "when", "from", "about", "don't", "it's", "what"}
 	for item in items:
 		text = item['text']
 		place = getArea(item)
@@ -40,7 +41,7 @@ def countByWord(items):
 				a = area[place]
 				for word in text.split(" "):
 					word = word.replace('.', '').lower()
-					if len(word) >= 3 and not word.startswith('\\') and not word.startswith('$'):
+					if len(word) > 3 and not word.startswith('\\') and not word.startswith('$') and not word in filter:
 						if word in a:
 							a[word] += 1
 						else:
@@ -50,7 +51,7 @@ def countByWord(items):
 				a = area[place]
 				for word in text.split(" "):
 					word = word.replace('.', '').lower()
-					if len(word) >= 3 and not word.startswith('\\') and not word.startswith('$'):
+					if len(word) > 3 and not word.startswith('\\') and not word.startswith('$') and not word in filter:
 						if word in a:
 							a[word] += 1
 						else:
@@ -171,11 +172,44 @@ def allHashGraph():
 	conn = pymongo.MongoClient()
 	db = conn.tweets
 	s = sort(db.byhash)
+	pie_chart = pygal.Pie()
+	pie_chart.title = 'Top 10 Hash Tags Overall'
+	count = 0
 	for hash in s:
-		print hash
-		pie_chart = pygal.Pie()
-		pie_chart.title = 'Top 10 Hash Tags Overall'
-		
+		pie_chart.add(hash[0] + " - " + str(hash[1]), hash[1])
+		count += 1
+		if count == 10:
+			break
+	pie_chart.render_to_file('total_hash_pie_chart.svg')  
+	
+def allWordGraph():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	s = sort(db.byword)
+	pie_chart = pygal.Pie()
+	pie_chart.title = 'Top 10 Words Overall'
+	count = 0
+	for hash in s:
+		pie_chart.add(hash[0] + " - " + str(hash[1]), hash[1])
+		count += 1
+		if count == 10:
+			break
+	pie_chart.render_to_file('total_word_pie_chart.svg')  
+	
+def allNameGraph():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	s = sort(db.byname)
+	pie_chart = pygal.Pie()
+	pie_chart.title = 'Top 10 Tweeters Overall'
+	count = 0
+	for hash in s:
+		pie_chart.add(hash[0] + " - " + str(hash[1]), hash[1])
+		count += 1
+		if count == 10:
+			break
+	pie_chart.render_to_file('total_name_pie_chart.svg')  
+	
 def hashGraph():
 	conn = pymongo.MongoClient()
 	db = conn.tweets
@@ -266,5 +300,6 @@ elif type == 11:
 elif type == 12:
 	conn = pymongo.MongoClient()
 	db = conn.tweets
-	print sort(db.byhash)
 	allHashGraph()
+	allNameGraph()
+	allWordGraph()
