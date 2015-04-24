@@ -138,10 +138,10 @@ def saveWord():
 	areas = countByWord()
 	db.byword.save(areas)
 
-#saveHash()
+saveHash()
 #saveName()
 #saveArea()
-saveWord()
+#saveWord()
 
 endTime = millis()
 
