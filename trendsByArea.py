@@ -1,4 +1,11 @@
 import pymongo
+<<<<<<< HEAD
+
+conn = pymongo.MongoClient()
+db = conn.tweets
+
+items = db.tweets.find()
+=======
 from tester import *
 
 
@@ -15,3 +22,4 @@ print masterTrends
             
             
 
+>>>>>>> dd411503cac64f1240ca4e379a16962134656d28
