@@ -156,7 +156,63 @@ def sort(base):
 				new[item] = sorted(area[item].iteritems(), key=lambda (k,v): (v,k), reverse = True)
 	return new
 	
-type = int(raw_input("- Calculate Counts - \n1. Name\n2. Area\n3. Hash\n4. Word\n5. Drop\n6. Drop Save All\n\n- Sort Data -\n7. Sort Hash\n8. Sort Name\n9. Sort Area\n10. Sort Words\n> "))
+def hashGraph():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	s = sort(db.byhash)
+	for area in s:
+		pie_chart = pygal.Pie()
+		pie_chart.title = 'Top 10 Hash Tags in ' + area
+		count = 0
+		for hash in s[area]:
+			pie_chart.add(hash[0] + " - " + str(hash[1]), hash[1])
+			count += 1
+			if count == 10:
+				break
+		pie_chart.render_to_file(area + '_hash_pie_chart.svg')  
+		
+def nameGraph():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	s = sort(db.byname)
+	for area in s:
+		pie_chart = pygal.Pie()
+		pie_chart.title = 'Top 10 Tweeters in ' + area
+		count = 0
+		for name in s[area]:
+			pie_chart.add(name[0] + " - " + str(name[1]), name[1])
+			count += 1
+			if count == 10:
+				break
+		pie_chart.render_to_file(area + '_name_pie_chart.svg')  
+		
+def areaGraph():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	s = sortCount(db.byarea)
+	pie_chart = pygal.Pie()
+	pie_chart.title = 'Tweet Count By Area'
+	for area in s:
+		if (area[0] != '_id'):
+			pie_chart.add(area[0] + " - " + str(area[1]), area[1])
+	pie_chart.render_to_file('count_area_pie_chart.svg')  	
+	
+def wordGraph():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	s = sort(db.byword)
+	for area in s:
+		pie_chart = pygal.Pie()
+		pie_chart.title = 'Top 10 Words Used in ' + area
+		count = 0
+		for word in s[area]:
+			pie_chart.add(word[0] + " - " + str(word[1]), word[1])
+			count += 1
+			if count == 10:
+				break
+		pie_chart.render_to_file(area + '_word_pie_chart.svg')  
+		
+type = int(raw_input("- Calculate Counts - \n1. Name\n2. Area\n3. Hash\n4. Word\n5. Drop\n6. Drop Save All\n\n- Sort Data -\n7. Sort Hash\n8. Sort Name\n9. Sort Area\n10. Sort Words\n11. Sort All\n> "))
 
 if type == 1:
 	saveName()
@@ -175,59 +231,15 @@ elif type == 6:
 	saveHash()
 	saveWord()
 elif type == 7:	
-	conn = pymongo.MongoClient()
-	db = conn.tweets
-	s = sort(db.byhash)
-	for area in s:
-		pie_chart = pygal.Pie()
-		pie_chart.title = 'Top 10 Hash Tags in ' + area
-		count = 0
-		for hash in s[area]:
-			pie_chart.add(hash[0] + " - " + str(hash[1]), hash[1])
-			count += 1
-			if count == 10:
-				break
-		pie_chart.render_to_file(area + '_hash_pie_chart.svg')  
-		
+	hashGraph()
 elif type == 8:
-	conn = pymongo.MongoClient()
-	db = conn.tweets
-	s = sort(db.byname)
-	for area in s:
-		pie_chart = pygal.Pie()
-		pie_chart.title = 'Top 10 Tweeters in ' + area
-		count = 0
-		for name in s[area]:
-			pie_chart.add(name[0] + " - " + str(name[1]), name[1])
-			count += 1
-			if count == 10:
-				break
-		pie_chart.render_to_file(area + '_name_pie_chart.svg')  
-		print
-		
+	nameGraph()	
 elif type == 9:
-	conn = pymongo.MongoClient()
-	db = conn.tweets
-	s = sortCount(db.byarea)
-	pie_chart = pygal.Pie()
-	pie_chart.title = 'Tweet Count By Area'
-	for area in s:
-		if (area[0] != '_id'):
-			pie_chart.add(area[0] + " - " + str(area[1]), area[1])
-	pie_chart.render_to_file('count_area_pie_chart.svg')  	
+	areaGraph()
 elif type == 10:
-	conn = pymongo.MongoClient()
-	db = conn.tweets
-	s = sort(db.byword)
-	for area in s:
-		pie_chart = pygal.Pie()
-		pie_chart.title = 'Top 10 Words Used in ' + area
-		count = 0
-		for word in s[area]:
-			pie_chart.add(word[0] + " - " + str(word[1]), word[1])
-			count += 1
-			if count == 10:
-				break
-		pie_chart.render_to_file(area + '_word_pie_chart.svg')  
-		print
-	print 
+	wordGraph()
+elif type == 11:
+	hashGraph()
+	nameGraph()
+	areaGraph()
+	wordGraph()
