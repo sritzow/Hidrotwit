@@ -144,7 +144,7 @@ def drop():
 	print "Databases dropped."
 	
 
-def sortCount(base):
+def sortCountArea(base):
 	for area in base.find():
 		return sorted(area.iteritems(), key=lambda (k,v): (v,k), reverse = True)
 	
@@ -153,13 +153,33 @@ def sort(base):
 	for area in base.find():
 		for item in area:
 			if item != '_id':
+				for i in area[item]:
+					if i in new:
+						new[i] += area[item][i]
+					else:
+						new[i] = area[item][i]
+	return sorted(new.iteritems(), key=lambda (k,v): (v,k), reverse = True)
+def sortArea(base):
+	new = {}
+	for area in base.find():
+		for item in area:
+			if item != '_id':
 				new[item] = sorted(area[item].iteritems(), key=lambda (k,v): (v,k), reverse = True)
 	return new
 	
-def hashGraph():
+def allHashGraph():
 	conn = pymongo.MongoClient()
 	db = conn.tweets
 	s = sort(db.byhash)
+	for hash in s:
+		print hash
+		pie_chart = pygal.Pie()
+		pie_chart.title = 'Top 10 Hash Tags Overall'
+		
+def hashGraph():
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	s = sortArea(db.byhash)
 	for area in s:
 		pie_chart = pygal.Pie()
 		pie_chart.title = 'Top 10 Hash Tags in ' + area
@@ -174,7 +194,7 @@ def hashGraph():
 def nameGraph():
 	conn = pymongo.MongoClient()
 	db = conn.tweets
-	s = sort(db.byname)
+	s = sortArea(db.byname)
 	for area in s:
 		pie_chart = pygal.Pie()
 		pie_chart.title = 'Top 10 Tweeters in ' + area
@@ -189,7 +209,7 @@ def nameGraph():
 def areaGraph():
 	conn = pymongo.MongoClient()
 	db = conn.tweets
-	s = sortCount(db.byarea)
+	s = sortCountArea(db.byarea)
 	pie_chart = pygal.Pie()
 	pie_chart.title = 'Tweet Count By Area'
 	for area in s:
@@ -200,7 +220,7 @@ def areaGraph():
 def wordGraph():
 	conn = pymongo.MongoClient()
 	db = conn.tweets
-	s = sort(db.byword)
+	s = sortArea(db.byword)
 	for area in s:
 		pie_chart = pygal.Pie()
 		pie_chart.title = 'Top 10 Words Used in ' + area
@@ -243,3 +263,8 @@ elif type == 11:
 	nameGraph()
 	areaGraph()
 	wordGraph()
+elif type == 12:
+	conn = pymongo.MongoClient()
+	db = conn.tweets
+	print sort(db.byhash)
+	allHashGraph()
