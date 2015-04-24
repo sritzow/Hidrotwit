@@ -11,9 +11,8 @@ except pymongo.errors.ConnectionFailure:
 
 db = conn.tweets #ok
 items = db.tweets.find() #ok
-#words = items.text.split(' ') #? what is tweet in this case #should be items.text.split(' ')
 
-def getArea(tweet):
+def getArea(tweet):# just gets all the areas
 	sf = Rect(Point(-122.75,36.8), Point(-121.75,37.8))
 	ny = Rect(Point(-74,40), Point(-73,41))
 	ch = Rect(Point(-89,41), Point(-88,42))
@@ -35,25 +34,34 @@ def getArea(tweet):
 
 def wordsByArea(items):
 	areas = {} # dictionary where areas go
-	wordlist = {}
+	wordlist = {} #dictionary where words go
 	for item in items: #Do you mean items? YES pulls and iterates through each tweet
 		gamma = getArea(item)
 		if gamma != None:
 			try:
 				if gamma in areas:#########around here is where im lost
 					theta = areas[gamma]
-					words = item[""][""]#come back to this
-					for word in words:
-						if 
+					words = item["text"]#come back to this
+					for word in words.split(" "):
+						if len(word) >= 3 and not word.startswith('\\') and not word.startswith('$'):
+							if word in theta:
+	                            theta[word] += 1
+	                        else:
+	                            theta[word] = 1
+                else:
+                	areas[gamma] = {}
+                	theta = areas[gamma]
+					words = item["text"]#come back to this
+					for word in words.split(" "):
+						if len(word) >= 3 and not word.startswith('\\') and not word.startswith('$'):
+							if word in theta:
+	                            theta[word] += 1
+	                        else:
+	                            theta[word] = 1
+            except:
+            	print "Something biffed, try again"
+    return areas #returns areas to dictionary
 
-
-				if len(item) <= 3: #you are looping through each word already no need to check if in item
-					continue
-				location = words["here"]["name of here"]
-				
-			except:
-				pass
-	return areas #returns areas to dictionary
 
 #### maybe this will loop through everything?
 for areas in items:
